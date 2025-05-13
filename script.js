@@ -135,4 +135,212 @@ function renderCountries() {
   renderPagination(filtered.length);
 }
 
+function showCountryDetails(country) {
+      const nativeNames = country.name?.nativeName ? 
+        Object.values(country.name.nativeName)
+          .map((n) => n.common)
+          .join(", ") : "N/A";
+          
+      const languages = country.languages ? 
+        Object.values(country.languages).join(", ") : "N/A";
+        
+      const currencies = country.currencies ? 
+        Object.values(country.currencies)
+          .map((c) => `${c.name} (${c.symbol || 'No symbol'})`)
+          .join(", ") : "N/A";
+          
+      const borders = country.borders ? country.borders : [];
+      const timezone = country.timezones ? country.timezones.join(", ") : "N/A";
+      const area = country.area ? country.area.toLocaleString() : "N/A";
+      const flag = country.flags?.png || country.flags?.svg || "";
+      const name = country.name?.common || "Unknown";
+      const capital = country.capital?.[0] || "No Capital";
+      const region = country.region || "Unknown";
+      const subregion = country.subregion || "Unknown";
+      const population = country.population?.toLocaleString() || "N/A";
+      const tld = country.tld?.join(", ") || "N/A";
 
+      let borderCountriesHTML = "";
+      if (borders.length > 0) {
+        borderCountriesHTML = borders.map(code => {
+          const borderCountry = countryCodeMap[code];
+          const countryName = borderCountry?.name?.common || code;
+          return `<span class="border-country" data-code="${code}">${countryName}</span>`;
+        }).join("");
+      } else {
+        borderCountriesHTML = "<span>None</span>";
+      }
+
+      modalContent.innerHTML = `
+        <section class="modal-header">
+          <h2>${name}</h2>
+          <span class="close-btn" id="close-btn">&times;</span>
+        </section>
+        <section class="modal-flag">
+          <img src="${flag}" alt="Flag of ${name}" />
+        </section>
+        <section class="country-details">
+          <section class="details-column">
+            <h3>Basic Information</h3>
+            <section class="detail-item">
+              <span class="detail-label">Official Name:</span>
+              <span>${country.name?.official || "N/A"}</span>
+            </section>
+            <section class="detail-item">
+              <span class="detail-label">Native Names:</span>
+              <span>${nativeNames}</span>
+            </section>
+            <section class="detail-item">
+              <span class="detail-label">Capital:</span>
+              <span>${capital}</span>
+            </section>
+            <section class="detail-item">
+              <span class="detail-label">Region:</span>
+              <span>${region} / ${subregion}</span>
+            </section>
+            <section class="detail-item">
+              <span class="detail-label">Population:</span>
+              <span>${population}</span>
+            </section>
+          </section>
+          <section class="details-column">
+            <h3>Additional Details</h3>
+            <section class="detail-item">
+              <span class="detail-label">Area:</span>
+              <span>${area} km²</span>
+            </section>
+            <section class="detail-item">
+              <span class="detail-label">Languages:</span>
+              <span>${languages}</span>
+            </section>
+            <section class="detail-item">
+              <span class="detail-label">Currencies:</span>
+              <span>${currencies}</span>
+            </section>
+            <section class="detail-item">
+              <span class="detail-label">Top Level Domain:</span>
+              <span>${tld}</span>
+            </section>
+            <section class="detail-item">
+              <span class="detail-label">Timezones:</span>
+              <span>${timezone}</span>
+            </section>
+          </section>
+          <section class="border-countries">
+            <h3>Border Countries</h3>
+            <section class="border-countries-list">
+              ${borderCountriesHTML}
+            </section>
+          </section>
+        </section>
+      `;
+
+      modal.style.display = "block";
+      
+      // Close button event
+      document.getElementById("close-btn").addEventListener("click", () => {
+        modal.style.display = "none";
+      });
+      
+      // Add click events to border countries
+      document.querySelectorAll(".border-country").forEach(el => {
+        el.addEventListener("click", () => {
+          const countryCode = el.getAttribute("data-code");
+          const borderCountry = countryCodeMap[countryCode];
+          if (borderCountry) {
+            showCountryDetails(borderCountry);
+          }
+        });
+      });
+    }
+
+    // Region Filter Dropdown
+    function populateRegionFilter() {
+      const uniqueRegions = Array.from(
+        new Set(countriesData.map((c) => c.region).filter(Boolean))
+      ).sort();
+      
+      regionFilter.innerHTML = '<option value="All">All Regions</option>';
+      
+      uniqueRegions.forEach(region => {
+        const option = document.createElement("option");
+        option.value = region;
+        option.textContent = region;
+        regionFilter.appendChild(option);
+      });
+    }
+
+    // Search Event
+    searchInput.addEventListener("input", () => {
+      currentPage = 1;
+      renderCountries();
+    });
+
+    // Region filter event
+    regionFilter.addEventListener("change", () => {
+      currentPage = 1;
+      renderCountries();
+    });
+
+    // Sort by event
+    sortBySelect.addEventListener("change", () => {
+      currentPage = 1;
+      renderCountries();
+    });
+
+    // Pagination
+    function renderPagination(totalItems) {
+      const pages = Math.ceil(totalItems / itemsPerPage);
+      const paginationContainer = document.getElementById("pagination");
+      paginationContainer.innerHTML = "";
+
+      // Don't show pagination if only one page
+      if (pages <= 1) {
+        return;
+      }
+
+      // Add previous button
+      const prevBtn = document.createElement("button");
+      prevBtn.innerHTML = "&laquo;";
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.addEventListener("click", () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderCountries();
+        }
+      });
+      paginationContainer.appendChild(prevBtn);
+
+      // Calculate which page buttons to show
+      let startPage = Math.max(1, currentPage - 2);
+      let endPage = Math.min(pages, startPage + 4);
+      
+      // Adjust if we're near the end
+      if (endPage - startPage < 4) {
+        startPage = Math.max(1, endPage - 4);
+      }
+
+      // Add page buttons
+      for (let i = startPage; i <= endPage; i++) {
+        const btn = document.createElement("button");
+        btn.textContent = i;
+        btn.className = i === currentPage ? "active" : "";
+        btn.addEventListener("click", () => {
+          currentPage = i;
+          renderCountries();
+        });
+        paginationContainer.appendChild(btn);
+      }
+
+      // Add next button
+      const nextBtn = document.createElement("button");
+      nextBtn.innerHTML = "&raquo;";
+      nextBtn.disabled = currentPage === pages;
+      nextBtn.addEventListener("click", () => {
+        if (currentPage < pages) {
+          currentPage++;
+          renderCountries();
+        }
+      });
+      paginationContainer.appendChild(nextBtn);
+    }
