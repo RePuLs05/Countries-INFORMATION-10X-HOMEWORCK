@@ -344,3 +344,16 @@ function showCountryDetails(country) {
       });
       paginationContainer.appendChild(nextBtn);
     }
+// Close modal on outside click
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+
+    // Close modal with ESC key
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.style.display === "block") {
+        modal.style.display = "none";
+      }
+    });
