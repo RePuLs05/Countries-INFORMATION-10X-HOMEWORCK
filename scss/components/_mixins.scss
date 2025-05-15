@@ -1,0 +1,26 @@
+// Mixins
+@mixin flex-center($direction: row, $wrap: wrap) {
+  display: flex;
+  flex-wrap: $wrap;
+  justify-content: center;
+  @if $direction == column {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@mixin input-styles {
+  padding: 12px 15px;
+  border-radius: $border-radius;
+  border: 1px solid $border-color;
+  background-color: $card-bg;
+  color: $text-light;
+  font-size: 1rem;
+  transition: $transition;
+  
+  &:focus {
+    outline: none;
+    border-color: $accent-color;
+    box-shadow: 0 0 0 2px rgba($accent-color, 0.2);
+  }
+}

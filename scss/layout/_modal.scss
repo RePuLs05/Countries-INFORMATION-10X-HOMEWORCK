@@ -1,0 +1,130 @@
+// Modal Styles
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  backdrop-filter: blur(8px);
+  background-color: rgba(0, 0, 0, 0.7);
+  
+  &-content {
+    background-color: $card-bg;
+    margin: 50px auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 700px;
+    border-radius: $border-radius;
+    color: $text-light;
+    position: relative;
+    box-shadow: $shadow;
+    animation: modalFade 0.3s;
+  }
+  
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    
+    h2 {
+      font-size: 1.8rem;
+      margin: 0;
+      padding-right: 20px;
+    }
+  }
+  
+  &-flag {
+    text-align: center;
+    margin-bottom: 25px;
+    
+    img {
+      max-height: 200px;
+      max-width: 100%;
+      object-fit: contain;
+      border-radius: 5px;
+      box-shadow: $shadow;
+    }
+  }
+}
+.close-btn {
+  font-size: 26px;
+  cursor: pointer;
+  transition: $transition;
+  line-height: 1;
+  
+  &:hover {
+    color: $accent-color;
+  }
+}
+
+// Country details
+.country-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: left;
+  
+  h3 {
+    margin-bottom: 15px;
+    color: $accent-color;
+    font-size: 1.2rem;
+  }
+}
+
+.detail-item {
+  margin-bottom: 10px;
+}
+
+.detail-label {
+  font-weight: bold;
+}
+
+.border-countries {
+  grid-column: 1 / -1;
+  margin-top: 15px;
+  
+  &-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+}
+
+.border-country {
+  padding: 5px 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: $transition;
+  
+  &:hover {
+    background-color: $accent-color;
+  }
+}
+
+// Loading indicator
+.loading {
+  @include flex-center;
+  min-height: 300px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: $accent-color;
+  animation: spin 1s ease-in-out infinite;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: $text-muted;
+}

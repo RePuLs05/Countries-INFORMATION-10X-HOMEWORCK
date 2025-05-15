@@ -1,0 +1,49 @@
+// Cards
+#cards-container {
+  @include flex-center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: $card-bg;
+  border-radius: $border-radius;
+  width: 250px;
+  overflow: hidden;
+  box-shadow: $shadow;
+  text-align: left;
+  transition: $transition;
+  cursor: pointer;
+  height: 100%;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $shadow-hover;
+  }
+  
+  img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  &-content {
+    padding: 20px;
+    
+    h2 {
+      margin: 0 0 15px 0;
+      font-size: 1.2rem;
+      color: $text-light;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    p {
+      margin: 8px 0;
+      font-size: 0.9rem;
+      color: $text-muted;
+    }
+  }
+}

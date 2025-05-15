@@ -1,0 +1,26 @@
+// Pagination
+#pagination {
+  @include flex-center;
+  gap: 5px;
+  margin: 20px 0 40px;
+  
+  button {
+    background-color: $card-bg;
+    color: $text-light;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: $transition;
+    min-width: 40px;
+    
+    &:hover {
+      background-color: lighten($card-bg, 10%);
+    }
+    
+    &.active {
+      background-color: $accent-color;
+      font-weight: bold;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+// Header styles
+header {
+  margin-bottom: 30px;
+  
+  h1 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: $text-light;
+  }
+}
+
+// Filters
+.filters {
+  @include flex-center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.search-container {
+  position: relative;
+  width: 300px;
+  
+  #search {
+    width: 100%;
+    padding: 12px 40px 12px 15px;
+    @include input-styles;
+  }
+  
+  .search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-muted;
+  }
+}
+
+#region-filter,
+#sort-by {
+  @include input-styles;
+  cursor: pointer;
+}
